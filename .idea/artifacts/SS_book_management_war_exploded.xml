@@ -1,0 +1,31 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="SS_book_management:war exploded">
+    <output-path>$PROJECT_DIR$/target/SS_book_management-1.0-SNAPSHOT</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <exploded>true</exploded>
+        <module>SS_book_management</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="root">
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="SS_book_management" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="Maven: com.h2database:h2:1.4.196" />
+          <element id="library" level="project" name="Maven: org.eclipse.persistence:eclipselink:2.7.2" />
+          <element id="library" level="project" name="Maven: org.eclipse.persistence:javax.persistence:2.2.0" />
+          <element id="library" level="project" name="Maven: org.eclipse.persistence:commonj.sdo:2.1.1" />
+          <element id="library" level="project" name="Maven: javax.validation:validation-api:1.1.0.Final" />
+          <element id="library" level="project" name="Maven: org.glassfish:javax.json:1.0.4" />
+        </element>
+      </element>
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/target/SS_book_management-1.0-SNAPSHOT/META-INF/MANIFEST.MF" />
+      </element>
+      <element id="javaee-facet-resources" facet="SS_book_management/web/Web" />
+    </root>
+  </artifact>
+</component>
