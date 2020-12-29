@@ -1,13 +1,7 @@
 package com.SS.restapi.models;
 
 import java.io.Serializable;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "books")
@@ -20,11 +14,18 @@ public class Book implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "barcode")
     private Long barcode;
+    @Column(name = "name")
     private String name;
+    @Column(name = "author")
     private String author;
+    @Column(name = "quantity")
     private Integer quantity;
-    private Float unit_price;
+    @Column(name = "unitPrice")
+    private Double unitPrice;
+    @Column(name = "type")
+    private String type;
 
     /* Barcode */
     public Long getBarcode() {
@@ -67,12 +68,22 @@ public class Book implements Serializable {
 
 
     /* Price per unit */
-    public Float getUnitPrice() {
-        return unit_price;
+    public Double getUnitPrice() {
+        return unitPrice;
     }
 
-    public void setUnitPrice(Float unit_price) {
-        this.unit_price = unit_price;
+    public void setUnitPrice(Double unitPrice) {
+        this.unitPrice = unitPrice;
+    }
+
+
+    /* Type */
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
 
@@ -82,7 +93,7 @@ public class Book implements Serializable {
                 ", name=" + name +
                 ", author=" + author +
                 ", quantity=" + quantity +
-                ", price per unit=" + unit_price +
+                ", price per unit=" + unitPrice +
                 '}';
     }
 

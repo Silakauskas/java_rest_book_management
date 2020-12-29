@@ -1,9 +1,11 @@
 package com.SS.restapi.resources;
 
 import com.SS.restapi.dao.BookDAO;
+import com.SS.restapi.models.AntiqueBook;
 import com.SS.restapi.models.Book;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.json.Json;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -14,6 +16,10 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.StringReader;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 @RequestScoped
 @Path("books")
@@ -26,6 +32,7 @@ public class BookResource {
 
     @GET
     public Response getAll() {
+        System.out.print("Getting all books.");
         return Response.ok(bookDAO.getAll()).build();
     }
 
@@ -51,11 +58,39 @@ public class BookResource {
         return Response.ok().build();
     }
 
+/*
     @POST
     public Response create(Book book) {
+
+        // if book type == "something"
         bookDAO.create(book);
         return Response.ok().build();
     }
+*/
+
+    @POST
+    public Response create(String s) {
+        System.out.println(s);
+
+        JsonObject message = new Gson().fromJson(s, JsonObject.class);
+
+        if (message.get("type").getAsString().equals("Book")) {
+            Book book = new Gson().fromJson(message, Book.class);
+            bookDAO.create(book);
+            System.out.println("Inserting a usual book.");
+        } else if (message.get("type").getAsString().equals("Antique")) {
+            AntiqueBook book = new Gson().fromJson(message, AntiqueBook.class);
+            bookDAO.create(book);
+            System.out.println("Inserting an antique book.");
+        }
+
+        return Response.ok().build();
+
+        // if book type == "something"
+        //bookDAO.create(book);
+        //return Response.ok().build();
+    }
+
 
     @DELETE
     @Path("{barcode}")
@@ -71,7 +106,7 @@ public class BookResource {
     @Path("/total_price/{barcode}")
     public Response getTotalPrice(@PathParam("barcode") Long barcode) {
         Book book = bookDAO.findByBarcode(barcode);
-        Float totalPrice = book.getUnitPrice()*book.getQuantity();
+        Double totalPrice = book.getUnitPrice()*book.getQuantity();
 
         return Response.ok(totalPrice).build();
     }
