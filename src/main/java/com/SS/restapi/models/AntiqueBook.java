@@ -27,4 +27,17 @@ public class AntiqueBook extends Book{
     public Double calcTotalPrice() {
         return  getQuantity() * getUnitPrice() * (2020-releaseYear)/10;
     }
+
+    /* Update Antique book's attributes */
+    @Override
+    public Boolean updateItem(String key, String value) {
+        switch(key) {
+            case "releaseYear": //special for antique book
+                setReleaseYear(Integer.parseInt(value));
+                break;
+            default:
+                return super.updateItem(key, value); // Update main attributes
+        }
+        return true;
+    }
 }

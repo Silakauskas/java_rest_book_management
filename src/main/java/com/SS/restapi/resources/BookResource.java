@@ -20,6 +20,7 @@ import javax.ws.rs.core.Response;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
+import java.util.Iterator;
 import java.util.Locale;
 
 
@@ -43,18 +44,38 @@ public class BookResource {
     public Response getBook(@PathParam("barcode") Long barcode) {
         Book book = bookDAO.findByBarcode(barcode);
 
+        if (book == null){
+            String respMessage = "There is no such item with barcode "+barcode+". Please provide a barcode of an existing item.";
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(respMessage).build();
+        }
+
         return Response.ok(book).build();
     }
 
     @PUT
     @Path("{barcode}")
-    public Response update(@PathParam("barcode") Long barcode, Book book) {
+    public Response update(@PathParam("barcode") Long barcode, String s) {
+
+        // Get message in Json Object from POST request body
+        JsonObject reqMessage = new Gson().fromJson(s, JsonObject.class);
+
+        // Book to be updated found in DB table - already of type Book, AntiqueBook or ScienceJournal
         Book updateBook = bookDAO.findByBarcode(barcode);
 
-        updateBook.setName(book.getName());
-        updateBook.setAuthor(book.getAuthor());
-        updateBook.setQuantity(book.getQuantity());
-        updateBook.setUnitPrice(book.getUnitPrice());
+        if (updateBook == null){
+            String respMessage = "There is no such item with barcode "+barcode+". Please provide a barcode of an existing item.";
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(respMessage).build();
+        }
+
+        Iterator<String> keys = reqMessage.keySet().iterator();
+        while (keys.hasNext()){
+            String key = keys.next();
+            if (!updateBook.updateItem(key, reqMessage.get(key).getAsString())) {
+                String respMessage = "Item "+barcode+" attribute "+key+" could not be updated. Please check attribute and book type.";
+                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(respMessage).build();
+            };
+        }
+
         bookDAO.update(updateBook);
 
         return Response.ok().build();
@@ -64,31 +85,54 @@ public class BookResource {
     public Response create(String s) {
         System.out.println(s);
 
+        // Get message in Json Object from POST request body
         JsonObject message = new Gson().fromJson(s, JsonObject.class);
-        String tempBookType = message.get("type").getAsString().toLowerCase();
+        String tempBookType = message.get("type").getAsString().toLowerCase(); // Provided by user
 
+        // Determine which type of book should be inserted
         if (tempBookType.equals("book")) {
             Book book = new Gson().fromJson(message, Book.class);
             bookDAO.create(book);
             System.out.println("Inserting a usual book.");
         } else if (tempBookType.equals("antique")) {
             AntiqueBook book = new Gson().fromJson(message, AntiqueBook.class);
+            /* TODO: try to insert book of type ScienceJournal without scienceIndex and with antique book....
+            if (book.getReleaseYear > 1900){
+               // ... do something ...
+               // ... say something ...
+            }
+             */
             bookDAO.create(book);
             System.out.println("Inserting an antique book.");
         } else if (tempBookType.equals("science journal")) {
             ScienceJournal book = new Gson().fromJson(message, ScienceJournal.class);
+            /*
+            if (book.getScienceIndex > 10 || book.getScienceIndex < 1){
+               // ... do something ...
+               // ... say something ...
+            }
+             */
             bookDAO.create(book);
             System.out.println("Inserting a science journal.");
+        } else {
+            String respMessage = "No such book type. Has to be one of: book, antique, science journal. Book not added.";
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(respMessage).build();
         }
 
         return Response.ok().build();
     }
 
 
+
     @DELETE
     @Path("{barcode}")
     public Response delete(@PathParam("barcode") Long barcode) {
         Book deleteBook = bookDAO.findByBarcode(barcode);
+
+        if (deleteBook == null){
+            String respMessage = "There is no such item with barcode "+barcode+". Please provide a barcode of an existing item.";
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(respMessage).build();
+        }
 
         bookDAO.delete(deleteBook);
 
@@ -98,18 +142,17 @@ public class BookResource {
     @GET
     @Path("/total_price/{barcode}")
     public Response getTotalPrice(@PathParam("barcode") Long barcode) {
+
         Book book = bookDAO.findByBarcode(barcode);
-/*
-        if (book instanceof ScienceJournal){
 
-        } else if (book instanceof AntiqueBook) {
-
-        } else {
-
+        if (book == null){
+            String respMessage = "There is no such item with barcode "+barcode+". Please provide a barcode of an existing item.";
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(respMessage).build();
         }
-        Double totalPrice = book.getUnitPrice()*book.getQuantity();
-*/
-        return Response.ok(book.getClass()+" total price "+book.calcTotalPrice()).build();
+
+        //String respMessage = "Type of book:"+book.getType()+" (id "+barcode+")   Total price:"+book.calcTotalPrice();
+        String respMessage = "Class of book:"+book.getClass()+" (id "+barcode+")   Total price:"+book.calcTotalPrice();
+        return Response.status(Response.Status.OK).entity(respMessage).build();
     }
 
 

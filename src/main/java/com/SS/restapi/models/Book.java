@@ -39,6 +39,7 @@ public class Book implements Serializable {
 
 
     /* Name */
+    @NotNull
     public String getName() {
         return name;
     }
@@ -49,6 +50,7 @@ public class Book implements Serializable {
 
 
     /* Author */
+    @NotNull
     public String getAuthor() {
         return author;
     }
@@ -59,6 +61,7 @@ public class Book implements Serializable {
 
 
     /* Quantity */
+    @NotNull
     public Integer getQuantity() {
         return quantity;
     }
@@ -69,6 +72,7 @@ public class Book implements Serializable {
 
 
     /* Price per unit */
+    @NotNull
     public Double getUnitPrice() {
         return unitPrice;
     }
@@ -79,6 +83,7 @@ public class Book implements Serializable {
 
 
     /* Type - book, antique book, science journal */
+    @NotNull
     public String getType() {
         return type;
     }
@@ -92,6 +97,29 @@ public class Book implements Serializable {
     public Double calcTotalPrice() {
         return  unitPrice * quantity;
     }
+
+
+    /* Update Book's attributes */
+    public Boolean updateItem(String key, String value) {
+        switch(key) {
+            case "name":
+                setName(value);
+                break;
+            case "author":
+                setAuthor(value);
+                break;
+            case "quantity":
+                setQuantity(Integer.parseInt(value));
+                break;
+            case "unitPrice":
+                setUnitPrice(Double.parseDouble(value));
+                break;
+            default:
+                return false;
+        }
+        return true;
+    }
+
 
     @Override
     public String toString() {
