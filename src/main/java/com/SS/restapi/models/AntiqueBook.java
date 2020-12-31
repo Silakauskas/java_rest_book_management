@@ -21,4 +21,10 @@ public class AntiqueBook extends Book{
     public void setReleaseYear(Integer releaseYear) {
         this.releaseYear = releaseYear;
     }
+
+    /* Antique book's total price */
+    @Override
+    public Double calcTotalPrice() {
+        return  getQuantity() * getUnitPrice() * (2020-releaseYear)/10;
+    }
 }

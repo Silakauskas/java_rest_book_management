@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tomee>
-    <Resource id="jdbc/my_h2_db" type="javax.sql.DataSource">
+    <Resource id="jdbc/SS_h2_db" type="javax.sql.DataSource">
         JdbcDriver = org.h2.Driver
-        JdbcUrl = jdbc:h2:file:~/my_h2_db
+        JdbcUrl = jdbc:h2:file:../../data/SS_h2_db
         UserName = sa
         Password = sa
         jtaManaged = true

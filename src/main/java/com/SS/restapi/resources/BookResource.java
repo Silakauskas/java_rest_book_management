@@ -1,6 +1,7 @@
 package com.SS.restapi.resources;
 
 import com.SS.restapi.dao.BookDAO;
+import com.SS.restapi.models.ScienceJournal;
 import com.SS.restapi.models.AntiqueBook;
 import com.SS.restapi.models.Book;
 import javax.enterprise.context.RequestScoped;
@@ -16,10 +17,11 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.StringReader;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+
+import java.util.Locale;
+
 
 @RequestScoped
 @Path("books")
@@ -58,37 +60,28 @@ public class BookResource {
         return Response.ok().build();
     }
 
-/*
-    @POST
-    public Response create(Book book) {
-
-        // if book type == "something"
-        bookDAO.create(book);
-        return Response.ok().build();
-    }
-*/
-
     @POST
     public Response create(String s) {
         System.out.println(s);
 
         JsonObject message = new Gson().fromJson(s, JsonObject.class);
+        String tempBookType = message.get("type").getAsString().toLowerCase();
 
-        if (message.get("type").getAsString().equals("Book")) {
+        if (tempBookType.equals("book")) {
             Book book = new Gson().fromJson(message, Book.class);
             bookDAO.create(book);
             System.out.println("Inserting a usual book.");
-        } else if (message.get("type").getAsString().equals("Antique")) {
+        } else if (tempBookType.equals("antique")) {
             AntiqueBook book = new Gson().fromJson(message, AntiqueBook.class);
             bookDAO.create(book);
             System.out.println("Inserting an antique book.");
+        } else if (tempBookType.equals("science journal")) {
+            ScienceJournal book = new Gson().fromJson(message, ScienceJournal.class);
+            bookDAO.create(book);
+            System.out.println("Inserting a science journal.");
         }
 
         return Response.ok().build();
-
-        // if book type == "something"
-        //bookDAO.create(book);
-        //return Response.ok().build();
     }
 
 
@@ -106,9 +99,17 @@ public class BookResource {
     @Path("/total_price/{barcode}")
     public Response getTotalPrice(@PathParam("barcode") Long barcode) {
         Book book = bookDAO.findByBarcode(barcode);
-        Double totalPrice = book.getUnitPrice()*book.getQuantity();
+/*
+        if (book instanceof ScienceJournal){
 
-        return Response.ok(totalPrice).build();
+        } else if (book instanceof AntiqueBook) {
+
+        } else {
+
+        }
+        Double totalPrice = book.getUnitPrice()*book.getQuantity();
+*/
+        return Response.ok(book.getClass()+" total price "+book.calcTotalPrice()).build();
     }
 
 

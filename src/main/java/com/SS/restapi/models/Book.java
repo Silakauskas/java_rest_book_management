@@ -2,6 +2,7 @@ package com.SS.restapi.models;
 
 import java.io.Serializable;
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "books")
@@ -77,7 +78,7 @@ public class Book implements Serializable {
     }
 
 
-    /* Type */
+    /* Type - book, antique book, science journal */
     public String getType() {
         return type;
     }
@@ -86,6 +87,11 @@ public class Book implements Serializable {
         this.type = type;
     }
 
+
+    /* Usual Book's total price */
+    public Double calcTotalPrice() {
+        return  unitPrice * quantity;
+    }
 
     @Override
     public String toString() {
