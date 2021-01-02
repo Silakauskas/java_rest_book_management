@@ -1,0 +1,8 @@
+{
+    "author": "Steven Hawking",
+    "name": "A Brief History of Time",
+    "quantity": 4,
+    "type": "science journal",
+    "scienceIndex": 11,
+    "unitPrice": 39.33
+}

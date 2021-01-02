@@ -1,6 +1,8 @@
 package com.SS.restapi.models;
 
 import javax.persistence.*;
+import com.SS.restapi.models.Constants;
+
 
 @Entity
 @Table(name = "books")
@@ -19,7 +21,7 @@ public class ScienceJournal extends Book{
     }
 
     public void setScienceIndex(Integer scienceIndex) {
-        this.scienceIndex = scienceIndex;
+            this.scienceIndex = scienceIndex;
     }
 
     /* Science journal's total price */
@@ -31,14 +33,12 @@ public class ScienceJournal extends Book{
     /* Update Science journal's attributes */
     @Override
     public Boolean updateItem(String key, String value) {
-        switch(key) {
-            case "scienceIndex": //special for science journal
-                setScienceIndex(Integer.parseInt(value));
-                break;
-            default:
-                return super.updateItem(key, value); // Update main attributes;
+        if (key.equals("scienceIndex")){
+            setScienceIndex(Integer.parseInt(value));    // Special for science journal
+            return true;
+        } else {
+            return super.updateItem(key, value);        // Update main attributes
         }
-        return true;
     }
 
 }

@@ -1,78 +1,18 @@
-2020-12-31 12:23:59 jdbc[22]: exception
+2021-01-02 12:38:01 jdbc[22]: exception
 org.h2.jdbc.JdbcSQLException: Table "BOOKS" not found; SQL statement:
 SELECT barcode FROM books WHERE FALSE [42102-196]
-2020-12-31 12:23:59 jdbc[22]: exception
+2021-01-02 12:38:01 jdbc[22]: exception
 org.h2.jdbc.JdbcSQLException: Table "SEQUENCE" not found; SQL statement:
 SELECT SEQ_NAME FROM SEQUENCE WHERE FALSE [42102-196]
-2020-12-31 12:27:14 jdbc[22]: exception
+2021-01-02 12:47:41 jdbc[22]: exception
 org.h2.jdbc.JdbcSQLException: Table "BOOKS" already exists; SQL statement:
 CREATE TABLE books (barcode BIGINT NOT NULL, DTYPE VARCHAR(31), author VARCHAR, name VARCHAR, quantity INTEGER, type VARCHAR, unitPrice DOUBLE, releaseYear INTEGER, scienceIndex INTEGER, PRIMARY KEY (barcode)) [42101-196]
-2020-12-31 12:27:14 jdbc[22]: exception
+2021-01-02 12:47:41 jdbc[22]: exception
 org.h2.jdbc.JdbcSQLException: Table "SEQUENCE" already exists; SQL statement:
 CREATE TABLE SEQUENCE (SEQ_NAME VARCHAR(50) NOT NULL, SEQ_COUNT NUMERIC(38), PRIMARY KEY (SEQ_NAME)) [42101-196]
-2020-12-31 14:38:57 jdbc[22]: exception
+2021-01-02 12:59:33 jdbc[22]: exception
 org.h2.jdbc.JdbcSQLException: Table "BOOKS" already exists; SQL statement:
 CREATE TABLE books (barcode BIGINT NOT NULL, DTYPE VARCHAR(31), author VARCHAR, name VARCHAR, quantity INTEGER, type VARCHAR, unitPrice DOUBLE, releaseYear INTEGER, scienceIndex INTEGER, PRIMARY KEY (barcode)) [42101-196]
-2020-12-31 14:38:57 jdbc[22]: exception
-org.h2.jdbc.JdbcSQLException: Table "SEQUENCE" already exists; SQL statement:
-CREATE TABLE SEQUENCE (SEQ_NAME VARCHAR(50) NOT NULL, SEQ_COUNT NUMERIC(38), PRIMARY KEY (SEQ_NAME)) [42101-196]
-2020-12-31 14:54:30 jdbc[22]: exception
-org.h2.jdbc.JdbcSQLException: Table "BOOKS" already exists; SQL statement:
-CREATE TABLE books (barcode BIGINT NOT NULL, DTYPE VARCHAR(31), author VARCHAR, name VARCHAR, quantity INTEGER, type VARCHAR, unitPrice DOUBLE, releaseYear INTEGER, scienceIndex INTEGER, PRIMARY KEY (barcode)) [42101-196]
-2020-12-31 14:54:30 jdbc[22]: exception
-org.h2.jdbc.JdbcSQLException: Table "SEQUENCE" already exists; SQL statement:
-CREATE TABLE SEQUENCE (SEQ_NAME VARCHAR(50) NOT NULL, SEQ_COUNT NUMERIC(38), PRIMARY KEY (SEQ_NAME)) [42101-196]
-2020-12-31 15:04:17 jdbc[22]: exception
-org.h2.jdbc.JdbcSQLException: Table "BOOKS" already exists; SQL statement:
-CREATE TABLE books (barcode BIGINT NOT NULL, DTYPE VARCHAR(31), author VARCHAR, name VARCHAR, quantity INTEGER, type VARCHAR, unitPrice DOUBLE, releaseYear INTEGER, scienceIndex INTEGER, PRIMARY KEY (barcode)) [42101-196]
-2020-12-31 15:04:17 jdbc[22]: exception
-org.h2.jdbc.JdbcSQLException: Table "SEQUENCE" already exists; SQL statement:
-CREATE TABLE SEQUENCE (SEQ_NAME VARCHAR(50) NOT NULL, SEQ_COUNT NUMERIC(38), PRIMARY KEY (SEQ_NAME)) [42101-196]
-2020-12-31 15:09:28 jdbc[22]: exception
-org.h2.jdbc.JdbcSQLException: Table "BOOKS" already exists; SQL statement:
-CREATE TABLE books (barcode BIGINT NOT NULL, DTYPE VARCHAR(31), author VARCHAR, name VARCHAR, quantity INTEGER, type VARCHAR, unitPrice DOUBLE, releaseYear INTEGER, scienceIndex INTEGER, PRIMARY KEY (barcode)) [42101-196]
-2020-12-31 15:09:28 jdbc[22]: exception
-org.h2.jdbc.JdbcSQLException: Table "SEQUENCE" already exists; SQL statement:
-CREATE TABLE SEQUENCE (SEQ_NAME VARCHAR(50) NOT NULL, SEQ_COUNT NUMERIC(38), PRIMARY KEY (SEQ_NAME)) [42101-196]
-2020-12-31 15:12:32 jdbc[22]: exception
-org.h2.jdbc.JdbcSQLException: Table "BOOKS" already exists; SQL statement:
-CREATE TABLE books (barcode BIGINT NOT NULL, DTYPE VARCHAR(31), author VARCHAR, name VARCHAR, quantity INTEGER, type VARCHAR, unitPrice DOUBLE, releaseYear INTEGER, scienceIndex INTEGER, PRIMARY KEY (barcode)) [42101-196]
-2020-12-31 15:12:32 jdbc[22]: exception
-org.h2.jdbc.JdbcSQLException: Table "SEQUENCE" already exists; SQL statement:
-CREATE TABLE SEQUENCE (SEQ_NAME VARCHAR(50) NOT NULL, SEQ_COUNT NUMERIC(38), PRIMARY KEY (SEQ_NAME)) [42101-196]
-2020-12-31 15:13:44 jdbc[22]: exception
-org.h2.jdbc.JdbcSQLException: Table "BOOKS" already exists; SQL statement:
-CREATE TABLE books (barcode BIGINT NOT NULL, DTYPE VARCHAR(31), author VARCHAR, name VARCHAR, quantity INTEGER, type VARCHAR, unitPrice DOUBLE, releaseYear INTEGER, scienceIndex INTEGER, PRIMARY KEY (barcode)) [42101-196]
-2020-12-31 15:13:44 jdbc[22]: exception
-org.h2.jdbc.JdbcSQLException: Table "SEQUENCE" already exists; SQL statement:
-CREATE TABLE SEQUENCE (SEQ_NAME VARCHAR(50) NOT NULL, SEQ_COUNT NUMERIC(38), PRIMARY KEY (SEQ_NAME)) [42101-196]
-2020-12-31 15:21:52 jdbc[22]: exception
-org.h2.jdbc.JdbcSQLException: Table "BOOKS" already exists; SQL statement:
-CREATE TABLE books (barcode BIGINT NOT NULL, DTYPE VARCHAR(31), author VARCHAR, name VARCHAR, quantity INTEGER, type VARCHAR, unitPrice DOUBLE, releaseYear INTEGER, scienceIndex INTEGER, PRIMARY KEY (barcode)) [42101-196]
-2020-12-31 15:21:52 jdbc[22]: exception
-org.h2.jdbc.JdbcSQLException: Table "SEQUENCE" already exists; SQL statement:
-CREATE TABLE SEQUENCE (SEQ_NAME VARCHAR(50) NOT NULL, SEQ_COUNT NUMERIC(38), PRIMARY KEY (SEQ_NAME)) [42101-196]
-2020-12-31 16:39:26 jdbc[22]: exception
-org.h2.jdbc.JdbcSQLException: Table "BOOKS" already exists; SQL statement:
-CREATE TABLE books (barcode BIGINT NOT NULL, DTYPE VARCHAR(31), author VARCHAR, name VARCHAR, quantity INTEGER, type VARCHAR, unitPrice DOUBLE, releaseYear INTEGER, scienceIndex INTEGER, PRIMARY KEY (barcode)) [42101-196]
-2020-12-31 16:39:26 jdbc[22]: exception
-org.h2.jdbc.JdbcSQLException: Table "SEQUENCE" already exists; SQL statement:
-CREATE TABLE SEQUENCE (SEQ_NAME VARCHAR(50) NOT NULL, SEQ_COUNT NUMERIC(38), PRIMARY KEY (SEQ_NAME)) [42101-196]
-2020-12-31 16:48:29 jdbc[22]: exception
-org.h2.jdbc.JdbcSQLException: Table "BOOKS" already exists; SQL statement:
-CREATE TABLE books (barcode BIGINT NOT NULL, DTYPE VARCHAR(31), author VARCHAR, name VARCHAR, quantity INTEGER, type VARCHAR, unitPrice DOUBLE, releaseYear INTEGER, scienceIndex INTEGER, PRIMARY KEY (barcode)) [42101-196]
-2020-12-31 16:48:29 jdbc[22]: exception
-org.h2.jdbc.JdbcSQLException: Table "SEQUENCE" already exists; SQL statement:
-CREATE TABLE SEQUENCE (SEQ_NAME VARCHAR(50) NOT NULL, SEQ_COUNT NUMERIC(38), PRIMARY KEY (SEQ_NAME)) [42101-196]
-2020-12-31 16:54:32 jdbc[22]: exception
-org.h2.jdbc.JdbcSQLException: Table "BOOKS" already exists; SQL statement:
-CREATE TABLE books (barcode BIGINT NOT NULL, DTYPE VARCHAR(31), author VARCHAR, name VARCHAR, quantity INTEGER, type VARCHAR, unitPrice DOUBLE, releaseYear INTEGER, scienceIndex INTEGER, PRIMARY KEY (barcode)) [42101-196]
-2020-12-31 16:54:32 jdbc[22]: exception
-org.h2.jdbc.JdbcSQLException: Table "SEQUENCE" already exists; SQL statement:
-CREATE TABLE SEQUENCE (SEQ_NAME VARCHAR(50) NOT NULL, SEQ_COUNT NUMERIC(38), PRIMARY KEY (SEQ_NAME)) [42101-196]
-2020-12-31 17:19:03 jdbc[22]: exception
-org.h2.jdbc.JdbcSQLException: Table "BOOKS" already exists; SQL statement:
-CREATE TABLE books (barcode BIGINT NOT NULL, DTYPE VARCHAR(31), author VARCHAR, name VARCHAR, quantity INTEGER, type VARCHAR, unitPrice DOUBLE, releaseYear INTEGER, scienceIndex INTEGER, PRIMARY KEY (barcode)) [42101-196]
-2020-12-31 17:19:03 jdbc[22]: exception
+2021-01-02 12:59:33 jdbc[22]: exception
 org.h2.jdbc.JdbcSQLException: Table "SEQUENCE" already exists; SQL statement:
 CREATE TABLE SEQUENCE (SEQ_NAME VARCHAR(50) NOT NULL, SEQ_COUNT NUMERIC(38), PRIMARY KEY (SEQ_NAME)) [42101-196]

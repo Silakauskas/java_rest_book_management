@@ -1,6 +1,8 @@
 package com.SS.restapi.models;
 
 import javax.persistence.*;
+import com.SS.restapi.models.Constants;
+
 
 @Entity
 @Table(name = "books")
@@ -25,19 +27,17 @@ public class AntiqueBook extends Book{
     /* Antique book's total price */
     @Override
     public Double calcTotalPrice() {
-        return  getQuantity() * getUnitPrice() * (2020-releaseYear)/10;
+        return  getQuantity() * getUnitPrice() * (Constants.CURRENT_YEAR-releaseYear)/Constants.ANTIQUE_TOTAL_PRICE_WEIGHT;
     }
 
     /* Update Antique book's attributes */
     @Override
     public Boolean updateItem(String key, String value) {
-        switch(key) {
-            case "releaseYear": //special for antique book
-                setReleaseYear(Integer.parseInt(value));
-                break;
-            default:
-                return super.updateItem(key, value); // Update main attributes
+        if (key.equals("releaseYear")){
+            setReleaseYear(Integer.parseInt(value));    // Special for antique book
+            return true;
+        } else {
+            return super.updateItem(key, value);        // Update main attributes
         }
-        return true;
     }
 }
