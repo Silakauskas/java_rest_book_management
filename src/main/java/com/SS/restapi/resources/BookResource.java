@@ -1,18 +1,17 @@
 package com.SS.restapi.resources;
 
 import com.SS.restapi.dao.BookDAO;
+import com.SS.restapi.helpers.PATCH;
 import com.SS.restapi.models.ScienceJournal;
 import com.SS.restapi.models.AntiqueBook;
 import com.SS.restapi.models.Book;
-import com.SS.restapi.models.Constants;
+import com.SS.restapi.helpers.Constants;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.json.Json;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -20,9 +19,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-
 import java.util.Iterator;
-import java.util.Locale;
 
 
 @RequestScoped
@@ -78,7 +75,7 @@ public class BookResource {
 
             // If updating release year - check if it is valid
             if (key.equals("releaseYear") && reqMessage.get(key).getAsInt() > Constants.ANTIQUE_MOST_RECENT_YEAR) {
-                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(
+                return Response.status(Response.Status.BAD_REQUEST).entity(
                         new Constants().AntiqueBookTooRecent() +
                         new Constants().CouldNotUpdateItemAttribute(barcode,key)
                 ).build();
@@ -87,7 +84,7 @@ public class BookResource {
             // If updating science index - check if it is valid
             if (key.equals("scienceIndex") && (reqMessage.get(key).getAsInt() < Constants.MIN_SCIENCE_INDEX
                     || reqMessage.get(key).getAsInt() > Constants.MAX_SCIENCE_INDEX)) {
-                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(
+                return Response.status(Response.Status.BAD_REQUEST).entity(
                         new Constants().ScienceIndexOutOfRange() +
                         new Constants().CouldNotUpdateItemAttribute(barcode,key)
                 ).build();
@@ -95,7 +92,7 @@ public class BookResource {
 
             // Could not update an attribute
             if (!updateBook.updateItem(key, reqMessage.get(key).getAsString())) {
-                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(new Constants().CouldNotUpdateItemAttribute(barcode,key)).build();
+                return Response.status(Response.Status.BAD_REQUEST).entity(new Constants().CouldNotUpdateItemAttribute(barcode,key)).build();
             }
 
         }
@@ -107,14 +104,13 @@ public class BookResource {
 
     @POST
     public Response create(String s) {
-        System.out.println(s);
 
         // Get message in Json Object from POST request body
         JsonObject message = new Gson().fromJson(s, JsonObject.class);
 
         if (message.get("type") == null || message.get("type").getAsString().isEmpty()) {
             // There is no such book type
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(new Constants().BookTypeNotCorrect()).build();
+            return Response.status(Response.Status.BAD_REQUEST).entity(new Constants().BookTypeNotCorrect()).build();
         }
 
         String tempBookType = message.get("type").getAsString().toLowerCase(); // Provided by user
@@ -124,41 +120,38 @@ public class BookResource {
 
             Book book = new Gson().fromJson(message, Book.class);
             bookDAO.create(book);
-            System.out.println("Inserting a usual book.");
 
         } else if (tempBookType.equals("antique") || tempBookType.equals("antique book")) {
 
             // Check if the book is valid
             if (message.get("releaseYear") == null) {
-                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(new Constants().AntiqueBookNoReleaseYear()).build();
+                return Response.status(Response.Status.BAD_REQUEST).entity(new Constants().AntiqueBookNoReleaseYear()).build();
             }
             if (message.get("releaseYear").getAsInt() > Constants.ANTIQUE_MOST_RECENT_YEAR) {
-                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(new Constants().AntiqueBookTooRecent()).build();
+                return Response.status(Response.Status.BAD_REQUEST).entity(new Constants().AntiqueBookTooRecent()).build();
             }
             // Form an antique book object out of JsonObject
             AntiqueBook book = new Gson().fromJson(message, AntiqueBook.class);
             bookDAO.create(book);
-            System.out.println("Inserting an antique book.");
 
         } else if (tempBookType.equals("science journal")) {
 
             // Check if the book is valid
             if (message.get("scienceIndex") == null) {
-                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(new Constants().ScienceJournalNoScienceIndex()).build();
+                return Response.status(Response.Status.BAD_REQUEST).entity(new Constants().ScienceJournalNoScienceIndex()).build();
             }
             if (message.get("scienceIndex").getAsInt() < Constants.MIN_SCIENCE_INDEX
                     || message.get("scienceIndex").getAsInt() > Constants.MAX_SCIENCE_INDEX) {
-                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(new Constants().ScienceIndexOutOfRange()).build();
+                return Response.status(Response.Status.BAD_REQUEST).entity(new Constants().ScienceIndexOutOfRange()).build();
             }
 
             // Form an antique book object out of JsonObject
             ScienceJournal book = new Gson().fromJson(message, ScienceJournal.class);
             bookDAO.create(book);
-            System.out.println("Inserting a science journal.");
 
         } else {
             // There is no such book type
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(new Constants().BookTypeNotCorrect()).build();
+            return Response.status(Response.Status.BAD_REQUEST).entity(new Constants().BookTypeNotCorrect()).build();
         }
 
         // Everything should be correct
@@ -194,8 +187,7 @@ public class BookResource {
             return Response.status(Response.Status.NOT_FOUND).entity(new Constants().BookNotFound(barcode)).build();
         }
 
-        //String respMessage = "Type of book:"+book.getType()+" (id "+barcode+")   Total price:"+book.calcTotalPrice();
-        String respMessage = "Class of book:"+book.getClass()+" (id "+barcode+")   Total price:"+book.calcTotalPrice();
+        String respMessage = "Book id "+barcode+" Total price:"+book.calcTotalPrice();
 
         return Response.status(Response.Status.OK).entity(respMessage).build();
     }

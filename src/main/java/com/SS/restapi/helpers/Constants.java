@@ -1,4 +1,4 @@
-package com.SS.restapi.models;
+package com.SS.restapi.helpers;
 
 public class Constants {
     // API constants

@@ -10,29 +10,29 @@ import javax.persistence.PersistenceContext;
 public class BookDAO {
 
     @PersistenceContext(unitName = "restapi_PU")
-    EntityManager em;
+    EntityManager manager;
 
     public List getAll() {
-        return em.createNamedQuery("Book.findAll", Book.class).getResultList();
+        return manager.createNamedQuery("Book.findAll", Book.class).getResultList();
     }
 
     public Book findByBarcode(Long barcode) {
-        return em.find(Book.class, barcode);
+        return manager.find(Book.class, barcode);
     }
 
     public void update(Book book) {
-        em.merge(book);
+        manager.merge(book);
     }
 
     public void create(Book book) {
-        em.persist(book);
+        manager.persist(book);
     }
 
     public void delete(Book book) {
-        if (!em.contains(book)) {
-            book = em.merge(book);
+        if (!manager.contains(book)) {
+            book = manager.merge(book);
         }
 
-        em.remove(book);
+        manager.remove(book);
     }
 }

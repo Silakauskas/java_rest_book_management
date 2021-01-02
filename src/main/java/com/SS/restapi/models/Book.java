@@ -28,7 +28,6 @@ public class Book implements Serializable {
     @Column(name = "type")
     private String type;
 
-    /* Barcode */
     public Long getBarcode() {
         return barcode;
     }
@@ -38,7 +37,6 @@ public class Book implements Serializable {
     }
 
 
-    /* Name */
     @NotNull
     public String getName() {
         return name;
@@ -49,7 +47,6 @@ public class Book implements Serializable {
     }
 
 
-    /* Author */
     @NotNull
     public String getAuthor() {
         return author;
@@ -60,7 +57,6 @@ public class Book implements Serializable {
     }
 
 
-    /* Quantity */
     @NotNull
     public Integer getQuantity() {
         return quantity;
@@ -71,7 +67,6 @@ public class Book implements Serializable {
     }
 
 
-    /* Price per unit */
     @NotNull
     public Double getUnitPrice() {
         return unitPrice;
@@ -93,7 +88,6 @@ public class Book implements Serializable {
     }
 
 
-    /* Usual Book's total price */
     public Double calcTotalPrice() {
         return  unitPrice * quantity;
     }

@@ -1,4 +1,4 @@
-package com.SS.restapi.resources;
+package com.SS.restapi.helpers;
 
 import javax.ws.rs.HttpMethod;
 import java.lang.annotation.ElementType;
