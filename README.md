@@ -32,7 +32,7 @@ File (DB table) can be viewed with DbVisualizer.
 
 Used:  
 o IntelliJ IDEA 2020.3.1  
-o JDK 1.8.0_271  
+o JDK 1.8.0_271 (IMPORTANT, might not work with Java 11)  
 o Maven 3.6.3  
 o JAX-RS (Java EE 7)  
 o H2 Database engine 1.4  
