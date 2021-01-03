@@ -1,6 +1,7 @@
 package com.SS.restapi.resources;
 
 import com.SS.restapi.dao.BookDAO;
+import com.SS.restapi.helpers.Errors;
 import com.SS.restapi.helpers.PATCH;
 import com.SS.restapi.models.ScienceJournal;
 import com.SS.restapi.models.AntiqueBook;
@@ -19,7 +20,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import java.util.Iterator;
 
 
 @RequestScoped
@@ -46,7 +46,7 @@ public class BookResource {
 
         // Could not find book
         if (book == null){
-            return Response.status(Response.Status.NOT_FOUND).entity(new Constants().BookNotFound(barcode)).build();
+            return Errors.bookNotFound(barcode);
         }
 
         return Response.ok(book).build();
@@ -64,41 +64,28 @@ public class BookResource {
 
         // Could not find a book to update
         if (updateBook == null){
-            return Response.status(Response.Status.NOT_FOUND).entity(new Constants().BookNotFound(barcode)).build();
+            return Errors.bookNotFound(barcode);
         }
 
         // Go through all attributes to be updated
-        Iterator<String> keys = reqMessage.keySet().iterator();
-
-        while (keys.hasNext()){
-            String key = keys.next();
-
+        for (String key : reqMessage.keySet()) {
             // If updating release year - check if it is valid
             if (key.equals("releaseYear") && reqMessage.get(key).getAsInt() > Constants.ANTIQUE_MOST_RECENT_YEAR) {
-                return Response.status(Response.Status.BAD_REQUEST).entity(
-                        new Constants().AntiqueBookTooRecent() +
-                        new Constants().CouldNotUpdateItemAttribute(barcode,key)
-                ).build();
+                return Errors.antiqueBookTooRecent();
             }
 
             // If updating science index - check if it is valid
             if (key.equals("scienceIndex") && (reqMessage.get(key).getAsInt() < Constants.MIN_SCIENCE_INDEX
                     || reqMessage.get(key).getAsInt() > Constants.MAX_SCIENCE_INDEX)) {
-                return Response.status(Response.Status.BAD_REQUEST).entity(
-                        new Constants().ScienceIndexOutOfRange() +
-                        new Constants().CouldNotUpdateItemAttribute(barcode,key)
-                ).build();
+                return Errors.scienceIndexOutOfRange();
             }
 
             // Could not update an attribute
             if (!updateBook.updateItem(key, reqMessage.get(key).getAsString())) {
-                return Response.status(Response.Status.BAD_REQUEST).entity(new Constants().CouldNotUpdateItemAttribute(barcode,key)).build();
+                return Errors.couldNotUpdateItemAttribute(barcode, key);
             }
-
         }
-
         bookDAO.update(updateBook);
-
         return Response.ok().build();
     }
 
@@ -110,48 +97,55 @@ public class BookResource {
 
         if (message.get("type") == null || message.get("type").getAsString().isEmpty()) {
             // There is no such book type
-            return Response.status(Response.Status.BAD_REQUEST).entity(new Constants().BookTypeNotCorrect()).build();
+            return Errors.bookTypeNotCorrect();
         }
 
         String tempBookType = message.get("type").getAsString().toLowerCase(); // Provided by user
 
         // Determine which type of book should be inserted
-        if (tempBookType.equals("book")) {
+        switch (tempBookType) {
+            case "book": {
 
-            Book book = new Gson().fromJson(message, Book.class);
-            bookDAO.create(book);
+                Book book = new Gson().fromJson(message, Book.class);
+                bookDAO.create(book);
 
-        } else if (tempBookType.equals("antique") || tempBookType.equals("antique book")) {
-
-            // Check if the book is valid
-            if (message.get("releaseYear") == null) {
-                return Response.status(Response.Status.BAD_REQUEST).entity(new Constants().AntiqueBookNoReleaseYear()).build();
+                break;
             }
-            if (message.get("releaseYear").getAsInt() > Constants.ANTIQUE_MOST_RECENT_YEAR) {
-                return Response.status(Response.Status.BAD_REQUEST).entity(new Constants().AntiqueBookTooRecent()).build();
+            case "antique":
+            case "antique book": {
+
+                // Check if the book is valid
+                if (message.get("releaseYear") == null) {
+                    return Errors.antiqueBookNoReleaseYear();
+                }
+                if (message.get("releaseYear").getAsInt() > Constants.ANTIQUE_MOST_RECENT_YEAR) {
+                    return Errors.antiqueBookTooRecent();
+                }
+                // Form an antique book object out of JsonObject
+                AntiqueBook book = new Gson().fromJson(message, AntiqueBook.class);
+                bookDAO.create(book);
+
+                break;
             }
-            // Form an antique book object out of JsonObject
-            AntiqueBook book = new Gson().fromJson(message, AntiqueBook.class);
-            bookDAO.create(book);
+            case "science journal": {
 
-        } else if (tempBookType.equals("science journal")) {
+                // Check if the book is valid
+                if (message.get("scienceIndex") == null) {
+                    return Errors.scienceJournalNoScienceIndex();
+                }
+                if (message.get("scienceIndex").getAsInt() < Constants.MIN_SCIENCE_INDEX
+                        || message.get("scienceIndex").getAsInt() > Constants.MAX_SCIENCE_INDEX) {
+                    return Errors.scienceIndexOutOfRange();
+                }
+                // Form an antique book object out of JsonObject
+                ScienceJournal book = new Gson().fromJson(message, ScienceJournal.class);
+                bookDAO.create(book);
 
-            // Check if the book is valid
-            if (message.get("scienceIndex") == null) {
-                return Response.status(Response.Status.BAD_REQUEST).entity(new Constants().ScienceJournalNoScienceIndex()).build();
+                break;
             }
-            if (message.get("scienceIndex").getAsInt() < Constants.MIN_SCIENCE_INDEX
-                    || message.get("scienceIndex").getAsInt() > Constants.MAX_SCIENCE_INDEX) {
-                return Response.status(Response.Status.BAD_REQUEST).entity(new Constants().ScienceIndexOutOfRange()).build();
-            }
-
-            // Form an antique book object out of JsonObject
-            ScienceJournal book = new Gson().fromJson(message, ScienceJournal.class);
-            bookDAO.create(book);
-
-        } else {
-            // There is no such book type
-            return Response.status(Response.Status.BAD_REQUEST).entity(new Constants().BookTypeNotCorrect()).build();
+            default:
+                // There is no such book type
+                return Errors.bookTypeNotCorrect();
         }
 
         // Everything should be correct
@@ -168,7 +162,7 @@ public class BookResource {
 
         // Could not find book to delete
         if (deleteBook == null){
-            return Response.status(Response.Status.NOT_FOUND).entity(new Constants().BookNotFound(barcode)).build();
+            return Errors.bookNotFound(barcode);
         }
 
         bookDAO.delete(deleteBook);
@@ -184,10 +178,10 @@ public class BookResource {
         Book book = bookDAO.findByBarcode(barcode);
 
         if (book == null){
-            return Response.status(Response.Status.NOT_FOUND).entity(new Constants().BookNotFound(barcode)).build();
+            return Errors.bookNotFound(barcode);
         }
 
-        String respMessage = "Book id "+barcode+" Total price:"+book.calcTotalPrice();
+        String respMessage = "Book id "+barcode+" Total price:"+String.format("%.2f",book.calcTotalPrice());
 
         return Response.status(Response.Status.OK).entity(respMessage).build();
     }
