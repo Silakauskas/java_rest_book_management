@@ -9,8 +9,8 @@ Starting:
 Put a book into the system, **POST**: http://localhost:8080/restapi/v1/books  
 Retreive book's information, **GET**: http://localhost:8080/restapi/v1/books/{barcode}  
 Retreive all books in the system, **GET**: http://localhost:8080/restapi/v1/books  
-Update a detail of a book, **PATCH**: http://localhost:8080/restapi/v1/books/{barcode}
-Delete a book, **DELETE**: http://localhost:8080/restapi/v1/books/{barcode}
+Update a detail of a book, **PATCH**: http://localhost:8080/restapi/v1/books/{barcode}  
+Delete a book, **DELETE**: http://localhost:8080/restapi/v1/books/{barcode}  
 Calculate the total price of specific books, **GET**: http://localhost:8080/restapi/v1/books/total_price/{barcode}  
 
 POST request body example (json):
